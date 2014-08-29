@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
     return nil if self.session[:session_token].nil?
     @user ||= User.find_by(session_token: self.session[:session_token])
   end
+  helper_method :current_user
 
   def log_in!(user)
     # force other clients to log out by regenerating token

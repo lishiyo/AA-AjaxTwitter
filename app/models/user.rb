@@ -48,4 +48,8 @@ class User < ActiveRecord::Base
       .order("tweets.created_at")
       .uniq
   end
+
+  def follows?(user)
+    out_follows.exists?(followee_id: user.id)
+  end
 end
