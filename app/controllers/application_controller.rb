@@ -25,6 +25,6 @@ class ApplicationController < ActionController::Base
   end
 
   def require_not_logged_in!
-    redirect_to user_url(current_user) unless current_user.nil?
+    redirect_to feed_url unless current_user.nil?
   end
 end

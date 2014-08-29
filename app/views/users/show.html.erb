@@ -3,16 +3,7 @@
 <b>Tweets</b>
 <ul>
   <% @user.tweets.each do |tweet| %>
-    <li>
-      <%= tweet.content %>
-
-      <h4>Mentions</h4>
-      <ul>
-        <% tweet.mentioned_users.each do |mentioned_user| %>
-          <li><%= mentioned_user.username %></li>
-        <% end %>
-      </ul>
-    </li/>
+    <li><%= render "tweets/tweet", tweet: tweet %></li>
   <% end %>
 </ul>
 

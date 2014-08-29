@@ -1,0 +1,8 @@
+<h1>Welcome <%= @user.username %>!</h1>
+
+<b>Your Feed!</b>
+<ul>
+  <% @user.feed_tweets.each do |tweet| %>
+    <li><%= render "tweets/tweet", tweet: tweet %></li>
+  <% end %>
+</ul>

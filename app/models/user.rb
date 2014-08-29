@@ -40,4 +40,12 @@ class User < ActiveRecord::Base
     self.session_token = SecureRandom::urlsafe_base64
     self.save!
   end
+
+  def feed_tweets
+    Tweet
+      .joins(:user => :in_follows)
+      .where("tweets.user_id = :id OR follows.follower_id = :id", id: self.id)
+      .order("tweets.created_at")
+      .uniq
+  end
 end

@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     if @user.save
       # redirect them to the new user's show page
       log_in!(@user)
-      redirect_to user_url(@user)
+      redirect_to feed_url
     else
       # input didn't pass validation; re-render sign up form.
       render :new

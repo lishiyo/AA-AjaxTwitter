@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
     else
       # sign the user in
       log_in!(@user)
-      redirect_to user_url(@user)
+      redirect_to feed_url
     end
   end
 
