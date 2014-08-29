@@ -32,6 +32,16 @@ class UsersController < ApplicationController
     render :show
   end
 
+  def search
+    if params[:query].present?
+      @users = User.where("username ~ ?", params[:query])
+    else
+      @users = User.none
+    end
+
+    render :search
+  end
+
   protected
   def user_params
     self.params.require(:user).permit(:username, :password)

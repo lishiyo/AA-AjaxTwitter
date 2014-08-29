@@ -3,6 +3,8 @@ AjaxTwitter::Application.routes.draw do
   resource :session, only: [:create, :destroy, :new]
   resources :tweets, only: [:create]
   resources :users, only: [:create, :new, :show] do
+    get "search", on: :collection
+
     resource :follow, only: [:create, :destroy]
   end
 
