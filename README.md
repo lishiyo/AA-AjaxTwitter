@@ -15,3 +15,12 @@
     * AJAX submit (obviously)
     * Provide linked ul of tweets; insert on success.
     * Clear for reuse!
+* TweetCompose II
+    * Add mentioned-users div.
+    * Put a script template in there. We'll write straight HTML.
+    * Template should have select tag, plus a remove button. Put this
+      in a span.
+    * Have an "add new mention" link.
+    * At start of TweetCompose, grab script template and compile.
+    * Each time clicking the add new mention, clone template and insert.
+    * Each time clicking remove link, remove the select/remove button.
