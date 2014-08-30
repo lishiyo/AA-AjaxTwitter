@@ -10,3 +10,8 @@
     * This built li and anchor tag.
     * Modified FollowToggle to take options; built even that.
     * Avoid underscore until the very end?
+* TweetCompose
+    * Decreasing counter of chars left (use input event).
+    * AJAX submit (obviously)
+    * Provide linked ul of tweets; insert on success.
+    * Clear for reuse!

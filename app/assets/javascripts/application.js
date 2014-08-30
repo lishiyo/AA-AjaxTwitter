@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.serializejson
 //= require_tree .
 
 $.FollowToggle = function (el, options) {
@@ -142,7 +143,59 @@ $.fn.usersSearch = function () {
   });
 };
 
+$.TweetCompose = function (el) {
+  this.$el = $(el);
+  this.$input = this.$el.find("textarea[name=tweet\\[content\\]]");
+
+  this.$input.on("input", this.handleInput.bind(this));
+  this.$el.on("submit", this.submit.bind(this));
+};
+
+$.TweetCompose.prototype.clearInput = function () {
+  this.$input.val("");
+  this.$el.find(":input").prop("disabled", false);
+}
+
+$.TweetCompose.prototype.handleInput = function (event) {
+  var inputLength = this.$input.val().length;
+
+  this.$el.find(".char-left").text(140 - inputLength + " characters left");
+  console.log($(event.currentTarget).val());
+};
+
+$.TweetCompose.prototype.handleSuccess = function (data) {
+  var $tweetsUl = $(this.$el.data("tweets-ul"));
+
+  var $li = $("<li></li>");
+  $li.text(JSON.stringify(data));
+  $tweetsUl.prepend($li);
+
+  this.clearInput();
+};
+
+$.TweetCompose.prototype.submit = function (event) {
+  event.preventDefault();
+
+  var data = this.$el.serializeJSON();
+  this.$el.find(":input").prop("disabled", true);
+
+  $.ajax({
+    url: "/tweets",
+    method: "POST",
+    data: data,
+    dataType: "json",
+    success: this.handleSuccess.bind(this)
+  });
+};
+
+$.fn.tweetCompose = function () {
+  return this.each(function () {
+    new $.TweetCompose(this);
+  });
+};
+
 $(function () {
   $("button.follow-toggle").followToggle();
   $("div.users-search").usersSearch();
+  $("form.tweet-compose").tweetCompose();
 });
