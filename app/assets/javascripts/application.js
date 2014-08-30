@@ -146,13 +146,25 @@ $.fn.usersSearch = function () {
 $.TweetCompose = function (el) {
   this.$el = $(el);
   this.$input = this.$el.find("textarea[name=tweet\\[content\\]]");
+  this.$mentionedUsersDiv = this.$el.find(".mentioned-users");
+  this.$mentionedUserTemplate = $(this.$mentionedUsersDiv.find("script").html())
 
   this.$input.on("input", this.handleInput.bind(this));
   this.$el.on("submit", this.submit.bind(this));
+  this.$el.find("a.add-mentioned-user").on("click", this.addMentionedUser.bind(this));
+  this.$mentionedUsersDiv.on("click", "a.remove-mentioned-user", this.removeMentionedUser.bind(this));
+};
+
+$.TweetCompose.prototype.addMentionedUser = function (event) {
+  event.preventDefault();
+
+  var $selectSpan = this.$mentionedUserTemplate.clone();
+  this.$mentionedUsersDiv.append($selectSpan);
 };
 
 $.TweetCompose.prototype.clearInput = function () {
   this.$input.val("");
+  this.$mentionedUsersDiv.empty();
   this.$el.find(":input").prop("disabled", false);
 }
 
@@ -160,7 +172,6 @@ $.TweetCompose.prototype.handleInput = function (event) {
   var inputLength = this.$input.val().length;
 
   this.$el.find(".char-left").text(140 - inputLength + " characters left");
-  console.log($(event.currentTarget).val());
 };
 
 $.TweetCompose.prototype.handleSuccess = function (data) {
@@ -171,6 +182,11 @@ $.TweetCompose.prototype.handleSuccess = function (data) {
   $tweetsUl.prepend($li);
 
   this.clearInput();
+};
+
+$.TweetCompose.prototype.removeMentionedUser = function (event) {
+  event.preventDefault();
+  $(event.currentTarget).parent().remove();
 };
 
 $.TweetCompose.prototype.submit = function (event) {

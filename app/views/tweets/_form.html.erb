@@ -1,7 +1,22 @@
 <h2>New Tweet!</h2>
 <form class="tweet-compose" data-tweets-ul="<%= tweets_ul %>">
   <textarea name="tweet[content]"></textarea><br>
-  <b class="char-left"></b>
+  <b class="char-left"></b><br>
+
+  <div class="mentioned-users">
+    <script type="text/template">
+      <span>
+        <select name="tweet[mentioned_user_ids][]">
+          <% User.all.each do |user| %>
+            <option value="<%= user.id %>"><%= user.username %></option>
+          <% end %>
+        </select>
+
+        <a class="remove-mentioned-user" href="#">Remove</a>
+      </span>
+    </script>
+  </div>
+  <a class="add-mentioned-user" href="#">Add</a><br>
 
   <input type="Submit" value="Post Tweet!">
 </form>
