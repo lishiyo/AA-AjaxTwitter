@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
     Tweet
       .joins(:user => :in_follows)
       .where("tweets.user_id = :id OR follows.follower_id = :id", id: self.id)
-      .order("tweets.created_at")
+      .order("tweets.created_at DESC")
       .uniq
   end
 
