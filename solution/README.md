@@ -30,3 +30,7 @@
     * You have to edit the User#feed_tweets to get it to use limit/max_created_at.
     * Have a div with a ul (for tweets) and a link for "Fetch More".
     * Bind click handler.
+* At some point they need to use an underscore template.
+    * They need this for InfiniteTweets
+    * But it would also be useful for TweetCompose.
+    * Maybe we can have them do TweetCompose the lame way, first.
