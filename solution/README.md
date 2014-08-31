@@ -24,3 +24,8 @@
     * At start of TweetCompose, grab script template and compile.
     * Each time clicking the add new mention, clone template and insert.
     * Each time clicking remove link, remove the select/remove button.
+* InfiniteTweets
+    * First, write a `#fetchMore` method.
+    * It should provide a `max_created_at` to the API.
+    * Have a div with a ul (for tweets) and a link for "Fetch More".
+    * Bind click handler.
