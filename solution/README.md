@@ -34,3 +34,8 @@
     * They need this for InfiniteTweets
     * But it would also be useful for TweetCompose.
     * Maybe we can have them do TweetCompose the lame way, first.
+* I think the most logical way to do this is to install a jquery event
+  handler like I did.
+    * Not sure how to sequence this, though. TweetCompose gets written
+      before InfiniteTweets.
+    * Also, can fix a bug by setting lastCreatedAt if needed.
