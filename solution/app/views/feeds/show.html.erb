@@ -4,11 +4,18 @@
 <div class="infinite-tweets">
   <script type="text/template">
     <%% tweets.forEach(function (tweet) { %>
-      <li><%%= tweet.content %> -- <%%= tweet.user.username %> -- <%%= tweet.created_at %></li>
+      <li>
+        <%%= tweet.content %> -- <%%= tweet.user.username %> -- <%%= tweet.created_at %>
+        <ul>
+          <%% tweet.mentions.forEach(function (mention) { %>
+            <li><%%= mention.user.username %></li>
+          <%% }); %>
+        </ul>
+      </li>
     <%% }); %>
   </script>
 
-  <ul id="feed"></ul>
+  <ul class="tweets" id="feed"></ul>
 
   <a href="#" class="fetch-more">Fetch more tweets!</a>
 </div>

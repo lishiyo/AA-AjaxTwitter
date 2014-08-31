@@ -248,7 +248,7 @@ $.InfiniteTweets.prototype.fetchMore = function (event) {
 
 $.InfiniteTweets.prototype.renderTweets = function (data) {
   var tmpl = _.template(this.$el.find("script").html());
-  this.$el.find("ul").append(tmpl({
+  this.$el.find("ul.tweets").append(tmpl({
     tweets: data
   }));
 };
