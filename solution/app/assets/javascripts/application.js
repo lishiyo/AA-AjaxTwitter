@@ -173,11 +173,7 @@ $.TweetCompose.prototype.handleInput = function (event) {
 
 $.TweetCompose.prototype.handleSuccess = function (data) {
   var $tweetsUl = $(this.$el.data("tweets-ul"));
-
-  var $li = $("<li></li>");
-  // TODO: What to do about this??
-  $li.text(JSON.stringify(data));
-  $tweetsUl.prepend($li);
+  $tweetsUl.trigger("insert-tweet", data)
 
   this.clearInput();
 };
@@ -213,6 +209,7 @@ $.InfiniteTweets = function (el) {
   this.lastCreatedAt = null;
 
   this.$el.on("click", ".fetch-more", this.fetchMore.bind(this));
+  this.$el.on("insert-tweet", this.insertTweet.bind(this));
 };
 
 $.InfiniteTweets.prototype.fetchMore = function (event) {
@@ -243,6 +240,17 @@ $.InfiniteTweets.prototype.fetchMore = function (event) {
   }
 
   $.ajax(options);
+};
+
+$.InfiniteTweets.prototype.insertTweet = function (event, data) {
+  var tmpl = _.template(this.$el.find("script").html());
+  this.$el.find("ul.tweets").prepend(tmpl({
+    tweets: [data]
+  }));
+
+  if (!this.lastCreatedAt) {
+    this.lastCreatedAt = data.created_at;
+  }
 };
 
 $.InfiniteTweets.prototype.renderTweets = function (data) {
