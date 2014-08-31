@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
       .order("tweets.created_at DESC")
       .uniq
 
-    # TODO: How can use limit/max_created_at here??
+    # TODO: How can we use limit/max_created_at here??
 
     @tweets
   end
