@@ -2,6 +2,12 @@
 
 <b>Your Feed!</b>
 <div class="infinite-tweets">
+  <script type="text/template">
+    <%% tweets.forEach(function (tweet) { %>
+      <li><%%= tweet.content %> -- <%%= tweet.user.username %> -- <%%= tweet.created_at %></li>
+    <%% }); %>
+  </script>
+
   <ul id="feed"></ul>
 
   <a href="#" class="fetch-more">Fetch more tweets!</a>

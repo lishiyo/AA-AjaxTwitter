@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.serializejson
+//= require underscore
 //= require_tree .
 
 $.FollowToggle = function (el, options) {
@@ -226,12 +227,7 @@ $.InfiniteTweets.prototype.fetchMore = function (event) {
     url: "/feed",
     dataType: "json",
     success: function (data) {
-      for (var i = 0; i < data.length; i++) {
-        var $li = $("<li></li>");
-        $li.text(JSON.stringify(data[i]));
-
-        infiniteTweets.$el.find("#feed").append($li);
-      }
+      infiniteTweets.renderTweets(data);
 
       if (data.length == 0) {
         infiniteTweets.$el.find(".fetch-more").replaceWith("<b>No more tweets!</b>");
@@ -248,6 +244,13 @@ $.InfiniteTweets.prototype.fetchMore = function (event) {
   }
 
   $.ajax(options);
+};
+
+$.InfiniteTweets.prototype.renderTweets = function (data) {
+  var tmpl = _.template(this.$el.find("script").html());
+  this.$el.find("ul").append(tmpl({
+    tweets: data
+  }));
 };
 
 $.fn.infiniteTweets = function () {
