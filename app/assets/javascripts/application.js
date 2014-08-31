@@ -210,8 +210,55 @@ $.fn.tweetCompose = function () {
   });
 };
 
+$.InfiniteTweets = function (el) {
+  this.$el = $(el);
+  this.tweets = [];
+
+  this.$el.on("click", ".fetch-more", this.fetchMore.bind(this));
+};
+
+$.InfiniteTweets.prototype.fetchMore = function (event) {
+  event.preventDefault();
+
+  var infiniteTweets = this;
+
+  var options = {
+    url: "/feed",
+    dataType: "json",
+    success: function (data) {
+      for (var i = 0; i < data.length; i++) {
+        var $li = $("<li></li>");
+        $li.text(JSON.stringify(data[i]));
+
+        infiniteTweets.$el.find("#feed").append($li);
+      }
+
+      if (data.length == 0) {
+        infiniteTweets.$el.find(".fetch-more").replaceWith("<b>No more tweets!</b>");
+      }
+
+      infiniteTweets.tweets = infiniteTweets.tweets.concat(data)
+    }
+  };
+
+  if (this.tweets.length > 0) {
+    options.data = {
+      max_created_at: this.tweets[this.tweets.length - 1].created_at
+    };
+  }
+
+  $.ajax(options);
+};
+
+$.fn.infiniteTweets = function () {
+  return this.each(function () {
+    new $.InfiniteTweets(this);
+  });
+};
+
 $(function () {
   $("button.follow-toggle").followToggle();
   $("div.users-search").usersSearch();
   $("form.tweet-compose").tweetCompose();
+  $("div.infinite-tweets").infiniteTweets();
 });
