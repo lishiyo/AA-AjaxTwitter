@@ -27,5 +27,6 @@
 * InfiniteTweets
     * First, write a `#fetchMore` method.
     * It should provide a `max_created_at` to the API.
+    * You have to edit the User#feed_tweets to get it to use limit/max_created_at.
     * Have a div with a ul (for tweets) and a link for "Fetch More".
     * Bind click handler.
