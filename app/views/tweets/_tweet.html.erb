@@ -1,4 +1,4 @@
-<%= tweet.content %>
+<%= tweet.content %> -- <%= tweet.user.username %> -- <%= tweet.created_at %>
 
 <% if tweet.mentioned_users.length > 0 %>
   <h4>Mentions</h4>
