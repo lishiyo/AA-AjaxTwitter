@@ -1,0 +1,10 @@
+<%= tweet.content %> -- <%= tweet.user.username %> -- <%= tweet.created_at %>
+
+<% if tweet.mentioned_users.length > 0 %>
+  <h4>Mentions</h4>
+  <ul>
+    <% tweet.mentioned_users.each do |mentioned_user| %>
+      <li><%= mentioned_user.username %></li>
+    <% end %>
+  </ul>
+<% end %>
