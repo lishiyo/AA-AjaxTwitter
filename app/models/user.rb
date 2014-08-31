@@ -43,7 +43,8 @@ class User < ActiveRecord::Base
 
   def feed_tweets(limit = nil, max_created_at = nil)
     @tweets = Tweet
-      .joins(:user => :in_follows)
+      .joins(:user)
+      .joins("LEFT OUTER JOIN follows ON users.id = follows.followee_id")
       .where("tweets.user_id = :id OR follows.follower_id = :id", id: self.id)
       .order("tweets.created_at DESC")
       .uniq
