@@ -84,20 +84,15 @@ $.fn.followToggle = function (options) {
 
 $.UsersSearch = function (el) {
   this.$el = $(el);
-  this.$input = $('<input type="text">');
-  this.$ul = $("<ul></ul>");
-  this.results = [];
-
-  this.$el.append(this.$input);
-  this.$el.append(this.$ul);
+  this.$input = this.$el.find("input[name=username]");
+  this.$ul = this.$el.find(".users");
 
   this.$input.on("input", this.handleInput.bind(this));
 };
 
 $.UsersSearch.prototype.handleInput = function (event) {
   if (this.$input.val() == "") {
-    this.results = [];
-    this.renderResults();
+    this.renderResults([]);
     return;
   }
 
@@ -108,17 +103,16 @@ $.UsersSearch.prototype.handleInput = function (event) {
     method: "GET",
     data: { query: this.$input.val() },
     success: function (data) {
-      usersSearch.results = data;
-      usersSearch.renderResults();
+      usersSearch.renderResults(data);
     }
   });
 };
 
-$.UsersSearch.prototype.renderResults = function () {
+$.UsersSearch.prototype.renderResults = function (users) {
   this.$ul.empty();
 
-  for (var i = 0; i < this.results.length; i++) {
-    var user = this.results[i];
+  for (var i = 0; i < users.length; i++) {
+    var user = users[i];
 
     var $a = $("<a></a>");
     $a.text(user.username);
@@ -146,14 +140,16 @@ $.fn.usersSearch = function () {
 
 $.TweetCompose = function (el) {
   this.$el = $(el);
+
   this.$input = this.$el.find("textarea[name=tweet\\[content\\]]");
+  this.$input.on("input", this.handleInput.bind(this));
+
   this.$mentionedUsersDiv = this.$el.find(".mentioned-users");
   this.$mentionedUserTemplate = $(this.$mentionedUsersDiv.find("script").html())
-
-  this.$input.on("input", this.handleInput.bind(this));
-  this.$el.on("submit", this.submit.bind(this));
   this.$el.find("a.add-mentioned-user").on("click", this.addMentionedUser.bind(this));
   this.$mentionedUsersDiv.on("click", "a.remove-mentioned-user", this.removeMentionedUser.bind(this));
+
+  this.$el.on("submit", this.submit.bind(this));
 };
 
 $.TweetCompose.prototype.addMentionedUser = function (event) {
@@ -179,6 +175,7 @@ $.TweetCompose.prototype.handleSuccess = function (data) {
   var $tweetsUl = $(this.$el.data("tweets-ul"));
 
   var $li = $("<li></li>");
+  // TODO: What to do about this??
   $li.text(JSON.stringify(data));
   $tweetsUl.prepend($li);
 
@@ -213,7 +210,7 @@ $.fn.tweetCompose = function () {
 
 $.InfiniteTweets = function (el) {
   this.$el = $(el);
-  this.tweets = [];
+  this.lastCreatedAt = null;
 
   this.$el.on("click", ".fetch-more", this.fetchMore.bind(this));
 };
@@ -229,17 +226,19 @@ $.InfiniteTweets.prototype.fetchMore = function (event) {
     success: function (data) {
       infiniteTweets.renderTweets(data);
 
-      if (data.length == 0) {
+      if (data.length < 20) {
         infiniteTweets.$el.find(".fetch-more").replaceWith("<b>No more tweets!</b>");
       }
 
-      infiniteTweets.tweets = infiniteTweets.tweets.concat(data)
+      if (data.length > 0) {
+        infiniteTweets.lastCreatedAt = data[data.length - 1].created_at;
+      }
     }
   };
 
-  if (this.tweets.length > 0) {
+  if (this.lastCreatedAt) {
     options.data = {
-      max_created_at: this.tweets[this.tweets.length - 1].created_at
+      max_created_at: this.lastCreatedAt
     };
   }
 
