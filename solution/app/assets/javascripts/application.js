@@ -152,12 +152,12 @@ $.TweetCompose.prototype.addMentionedUser = function (event) {
   event.preventDefault();
 
   var $mentionedUserSelect = $(this.$mentionedUsersDiv.find("script").html())
-  this.$mentionedUsersDiv.append($mentionedUserSelect);
+  this.$mentionedUsersDiv.find("ul").append($mentionedUserSelect);
 };
 
 $.TweetCompose.prototype.clearInput = function () {
   this.$input.val("");
-  this.$mentionedUsersDiv.empty();
+  this.$mentionedUsersDiv.find("ul").empty();
   this.$el.find(":input").prop("disabled", false);
 }
 
