@@ -134,32 +134,62 @@ See if this helps you set up the follow toggle.
 
 ## Phase III: `TweetCompose`
 
-## TODO
+Write a `TweetCompose` plugin. First, change
+`app/views/tweets/_form.html.erb`. Give the form a class
+`tweet-compose`. Write a jQuery plugin that graphs this form and
+installs itself.
 
-* TweetCompose
-    * Decreasing counter of chars left (use input event).
-    * AJAX submit (obviously)
-    * Provide linked ul of tweets; insert on success.
-    * Clear for reuse!
-* TweetCompose II
-    * Add mentioned-users div.
-    * Put a script template in there. We'll write straight HTML.
-    * Template should have select tag, plus a remove button. Put this
-      in a span.
-    * Have an "add new mention" link.
-    * At start of TweetCompose, grab script template and compile.
-    * Each time clicking the add new mention, clone template and insert.
-    * Each time clicking remove link, remove the select/remove button.
-* InfiniteTweets
-    * First, write a `#fetchMore` method.
-    * It should provide a `max_created_at` to the API.
-    * You have to edit the User#feed_tweets to get it to use limit/max_created_at.
-    * Have a div with a ul (for tweets) and a link for "Fetch More".
-    * Bind click handler.
-* At some point they need to use an underscore template.
-    * They need this for InfiniteTweets
-    * But it would also be useful for TweetCompose.
-    * Maybe we can have them do TweetCompose the lame way, first.
+In the `TweetCompose` constructor, install a `submit` event handler.
+Write a `TweetCompose#submit` method that uses `serializeJSON` to
+build JSON from the form contents and use `$.ajax` to submit the form.
+
+As before, disable the form when the submit is made. You can't disable
+a form, you have to disable all the inputs. To get all the inputs, use
+jQuery's `:input` pseudo-CSS selector.
+
+Write a `TweetCompose#handleSuccess` method. This should clear out all
+the inputs and re-enable the form.
+
+Next, let's add a counter for the number of characters in the message.
+Add a `<b class="chars-left">` tag to the form. In the `TweetCompose`
+constructor, add an `input` event handler on the `textarea`. Update
+the `b` tag with the number of characters remaining (starting at 140).
+
+Lastly, let's finish writing `#handleSuccess` so that it inserts the
+created tweet into the list of all tweets. How does `TweetCompose`
+find the `ul` of tweets? We can set a `data-tweets-ul="#feed"`
+property on the form. Our `TweetCompose` can pull out this data
+attribute and use the selector `#feed` to find the ul. This is better
+than hard coding `#feed` into the JS.
+
+For simplicity, have `TweetCompose` call `JSON.stringify` on the
+created Tweet. Build an `li` with the JSON content, and stick it in
+the `ul`. We'll actually render this nicely in a later phase.
+
+Call your TA over to check your work!
+
+## Phase IV: `TweetCompose`: Mentioned Users
+
+* Add mentioned-users div.
+* Put a script template in there. We'll write straight HTML.
+* Template should have select tag, plus a remove button. Put this
+  in a span.
+* Have an "add new mention" link.
+* At start of TweetCompose, grab script template and compile.
+* Each time clicking the add new mention, clone template and insert.
+* Each time clicking remove link, remove the select/remove button.
+
+## Phase V: Infinite Tweets
+
+* First, write a `#fetchMore` method.
+* It should provide a `max_created_at` to the API.
+* You have to edit the User#feed_tweets to get it to use limit/max_created_at.
+* Have a div with a ul (for tweets) and a link for "Fetch More".
+* Bind click handler.
+* Use an inline underscore template.
+
+## Phase VI: Linking `TweetCompose` and `InfiniteTweets`
+
 * I think the most logical way to do this is to install a jquery event
   handler like I did.
     * Not sure how to sequence this, though. TweetCompose gets written
