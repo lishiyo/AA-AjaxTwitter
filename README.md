@@ -257,8 +257,59 @@ tweets to fetch. You can tell there are no more tweets to fetch if `<
 
 ## Phase VII: Underscore Templates
 
-* Use an inline underscore template.
-* Link `TweetCompose` to `InfiniteTweets` by triggering an
-  `insert-tweet` event.
-* Bug warning: set `lastCreatedAt` when creating a tweet. Else it could
-  get fetched.
+When we fetch the tweets, we want to not just stick the JSON
+representation; we want to render a partial to insert HTML into the
+page.
+
+In theory, we could build HTML in JavaScript. This would be tortuous
+as the HTML got more sophisticated. Just like we use ERB in Ruby,
+we'll use another templating language called Underscore templates in
+JavaScript. Download the underscore.js library.
+
+In your `div.infinite-tweets`, make a `<script type="text/template">`
+as before. Inside here, write an Underscore template that iterates
+through a `tweets` array, building one `li` for each. This is a lot
+like Ruby, except:
+
+```
+<% tweets.each do |tweet| %>
+  ...
+<% end %>
+
+VS.
+
+<% tweets.forEach(function (tweet) { %>
+  ...
+<% }); %>
+```
+
+As you did for `TweetCompose`, have your `InfiniteTweets` find the
+template and extract it. Modify the `#insertTweets` method. Take the
+template code and pass it to the `_.template` method, which will build
+a function from your Underscore template code. Call the compiled
+template function, passing in `{ tweets: tweets }`, which makes the
+tweets variable available to the template. Insert the rendered partial.
+
+Check that this works. Call you TA over to double check your work.
+
+## Phase VIIb: jQuery Triggering
+
+There is one last step. Your `TweetCompose` also tries to insert
+tweets into the feed. Should we copy over all the logic of
+`InfiniteTweets` into `TweetCompose`? That doesn't sound very DRY.
+
+Instead of having `TweetCompose` insert HTML into the DOM, have it
+`jQuery#trigger` an `insert-tweet` event on the appropriate ul. This
+is a **custom event**, not a pre-defined browser event. You can use so
+that one module of code can signal another module. Here, this allows
+`TweetCompose` to remain agnostic of how a new tweet is inserted; by
+triggering the custom event, `TweetCompose` simply notifies
+`InfiniteTweets` to do the work of insertion.
+
+Add a listener for `insert-tweet` in the `InfiniteTweet` class.
+Install it on the ul.
+
+**Common bug**: you may also want `insertTweet` to update the the
+`lastCreatedAt` instance variable. If you were to compose a tweet and
+not set `lastCreatedAt`, you'll fetch the same tweet again when you
+make an AJAX call to `/feed`.
