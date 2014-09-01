@@ -170,16 +170,51 @@ Call your TA over to check your work!
 
 ## Phase IV: `TweetCompose`: Mentioned Users
 
-* Add mentioned-users div.
-* Put a script template in there. We'll write straight HTML.
-* Template should have select tag, plus a remove button. Put this
-  in a span.
-* Have an "add new mention" link.
-* At start of TweetCompose, grab script template and compile.
-* Each time clicking the add new mention, clone template and insert.
-* Each time clicking remove link, remove the select/remove button.
+The next part is to allow us to tag multiple users in a tweet. Right
+now we can select a single user to tag. Our killer feature will be to
+dynamically create more select tags so we can create more users.
+
+To do this, first move the `select` tag into a `<script
+type="text/template">` tag. This tells the browser not to put the
+`select` in the DOM. If you reload, you should see no select tag.
+
+Write an "Add mention" anchor tag. Give it a phony href
+(`href="javascript:void(0)"` is typical). Also give it a class
+`add-mentioned-user`.
+
+In the `TweetCompose` constructor, add a listener for a click on
+`a.add-mentioned-user`. I wrote a `TweetCompose#addMentionedUser`
+method. It found the `script` tag and called `$scriptTag.html()` to
+get the HTML we wrote. I then passed the contents to jQuery
+(`$($scriptTag.html())`) to build a new `select`. I inserted this into
+the DOM.
+
+Test this out and make sure you can create new `select` tags by
+clicking the link.
+
+Next, I also want to be able to **remove** select tags. Say we clicked
+"add" accidentally and want to remove the `select`. To do this, I
+modified the script template slightly. I put the `select` in a `div`.
+In the same div, I wrote an anchor tag with class
+`remove-mentioned-user`. I gave it a similar bogus `href` attribute.
+
+In the `TweetCompose` constructor, I listened for `click` events on
+`a.remove-mentioned-user`. **You have to use event delegation here:
+why?** I wrote a `TweetCompose#removeMentionedUser` which used the
+`event.currentTarget` to learn which remove anchor tag was clicked,
+and removed the parent `div` element. This removes both the anchor tag
+and the select, too.
+
+Check that this is working.
+
+Lastly, we want to update `TweetCompose#clearInput` to clear out all
+the selects after form submission succeeds. To do this, I was careful
+to put all my mention divs into a `<div class="mentioned-users">`. In
+`#clearInput`, I grab this div and `empty()` it.
 
 ## Phase V: Infinite Tweets
+
+**TODO**: Finish me!
 
 * First, write a `#fetchMore` method.
 * It should provide a `max_created_at` to the API.
@@ -189,6 +224,8 @@ Call your TA over to check your work!
 * Use an inline underscore template.
 
 ## Phase VI: Linking `TweetCompose` and `InfiniteTweets`
+
+**TODO**: Finish me!
 
 * I think the most logical way to do this is to install a jquery event
   handler like I did.
