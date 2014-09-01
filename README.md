@@ -1,5 +1,8 @@
 # AJAX Twitter
 
+First, run `rake db:create db:migrate db:seed` for the initial
+database setup.
+
 ## Phase I: `FollowToggle`
 
 We will write a jQuery plugin that turns a button into a toggle that
