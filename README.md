@@ -214,21 +214,51 @@ to put all my mention divs into a `<div class="mentioned-users">`. In
 
 ## Phase V: Infinite Tweets
 
-**TODO**: Finish me!
+Right now we send all the tweets down when the user requests `/feed`.
+If there are many, many tweets in the feed, this will send a huge
+amount of data to the user. Moreover, the user is likely to be
+interested in only the most recent tweets.
 
-* First, write a `#fetchMore` method.
-* It should provide a `max_created_at` to the API.
-* You have to edit the User#feed_tweets to get it to use limit/max_created_at.
-* Have a div with a ul (for tweets) and a link for "Fetch More".
-* Bind click handler.
+Let's **paginate** the sending of tweets. To start, open up
+`app/models/user.rb`. Modify the `#feed_tweets` method to send only up
+to `limit` tweets. Also, modify it not to return any tweets created
+after `max_created_at`.
+
+Next, let's begin modifying the `app/views/feeds/show.html.erb`
+template. Replace the `ul` with a `div` with class `infinite-tweets`.
+In the `div`, create an empty `ul` with id `feed`. Also, write an
+anchor tag with class `fetch-more`; this link will be clicked to load
+more tweets.
+
+Begin writing an `InfiniteTweets` plugin. Listen for clicks to fetch
+more; begin writing an `InfiniteTweets#fetchMore` method.
+
+In `#fetchMore`, make an AJAX request to `/feed`. In the success
+handler, call a `#insertTweets` method. For simplicity, for each
+tweet, just append `<li>` items with `JSON.stringify(tweet)` into the
+appropriate `ul`.
+
+If you click the link twice, you'll fetch the same set of tweets
+twice. We need to send the `max_created_at` parameter. In the
+constructor, start `this.maxCreatedAt` at `null`. In the
+`#fetchTweets` method, if `maxCreatedAt != null`, send it in the AJAX
+`data` parameter. (Notice the often confusing mix of Ruby and JS
+naming conventions).
+
+When successfully fetching tweets, record `max_created_at` by looking
+at the `created_at` attribute of the last tweet fetched. This should
+ensure that each call to `#fetchTweets` fetches the next set of
+tweets, chronologically.
+
+Once you've fetched all the tweets, you should remove the "Fetch more
+tweets" link and replace it with a message that there are no more
+tweets to fetch. You can tell there are no more tweets to fetch if `<
+20` tweets are returned.
+
+## Phase VII: Underscore Templates
+
 * Use an inline underscore template.
-
-## Phase VI: Linking `TweetCompose` and `InfiniteTweets`
-
-**TODO**: Finish me!
-
-* I think the most logical way to do this is to install a jquery event
-  handler like I did.
-    * Not sure how to sequence this, though. TweetCompose gets written
-      before InfiniteTweets.
-    * Also, can fix a bug by setting lastCreatedAt if needed.
+* Link `TweetCompose` to `InfiniteTweets` by triggering an
+  `insert-tweet` event.
+* Bug warning: set `lastCreatedAt` when creating a tweet. Else it could
+  get fetched.
