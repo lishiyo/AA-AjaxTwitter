@@ -142,7 +142,6 @@ $.TweetCompose = function (el) {
   this.$input.on("input", this.handleInput.bind(this));
 
   this.$mentionedUsersDiv = this.$el.find(".mentioned-users");
-  this.$mentionedUserTemplate = $(this.$mentionedUsersDiv.find("script").html())
   this.$el.find("a.add-mentioned-user").on("click", this.addMentionedUser.bind(this));
   this.$mentionedUsersDiv.on("click", "a.remove-mentioned-user", this.removeMentionedUser.bind(this));
 
@@ -152,8 +151,8 @@ $.TweetCompose = function (el) {
 $.TweetCompose.prototype.addMentionedUser = function (event) {
   event.preventDefault();
 
-  var $selectSpan = this.$mentionedUserTemplate.clone();
-  this.$mentionedUsersDiv.append($selectSpan);
+  var $mentionedUserSelect = $(this.$mentionedUsersDiv.find("script").html())
+  this.$mentionedUsersDiv.append($mentionedUserSelect);
 };
 
 $.TweetCompose.prototype.clearInput = function () {

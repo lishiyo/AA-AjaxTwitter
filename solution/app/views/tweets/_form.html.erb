@@ -5,7 +5,7 @@
 
   <div class="mentioned-users">
     <script type="text/template">
-      <span>
+      <div>
         <select name="tweet[mentioned_user_ids][]">
           <% User.all.each do |user| %>
             <option value="<%= user.id %>"><%= user.username %></option>
@@ -13,7 +13,7 @@
         </select>
 
         <a class="remove-mentioned-user" href="javascript:void(0)">Remove</a>
-      </span>
+      </div>
     </script>
   </div>
   <a class="add-mentioned-user" href="javascript:void(0)">Add mention</a><br>
