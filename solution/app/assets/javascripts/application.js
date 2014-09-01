@@ -96,15 +96,12 @@ $.UsersSearch.prototype.handleInput = function (event) {
     return;
   }
 
-  var usersSearch = this;
   $.ajax({
     url: "/users/search",
     dataType: "json",
     method: "GET",
     data: { query: this.$input.val() },
-    success: function (data) {
-      usersSearch.renderResults(data);
-    }
+    success: this.renderResults.bind(this)
   });
 };
 
