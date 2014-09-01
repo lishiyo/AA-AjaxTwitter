@@ -217,7 +217,7 @@ $.InfiniteTweets.prototype.fetchMore = function (event) {
     url: "/feed",
     dataType: "json",
     success: function (data) {
-      infiniteTweets.renderTweets(data);
+      infiniteTweets.insertTweets(data);
 
       if (data.length < 20) {
         infiniteTweets.$el.find(".fetch-more").replaceWith("<b>No more tweets!</b>");
@@ -249,7 +249,7 @@ $.InfiniteTweets.prototype.insertTweet = function (event, data) {
   }
 };
 
-$.InfiniteTweets.prototype.renderTweets = function (data) {
+$.InfiniteTweets.prototype.insertTweets = function (data) {
   var tmpl = _.template(this.$el.find("script").html());
   this.$el.find("ul.tweets").append(tmpl({
     tweets: data
