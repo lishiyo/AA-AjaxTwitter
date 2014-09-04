@@ -204,11 +204,11 @@ $.InfiniteTweets = function (el) {
   this.$el = $(el);
   this.lastCreatedAt = null;
 
-  this.$el.on("click", ".fetch-more", this.fetchMore.bind(this));
+  this.$el.on("click", ".fetch-more", this.fetchTweets.bind(this));
   this.$el.on("insert-tweet", this.insertTweet.bind(this));
 };
 
-$.InfiniteTweets.prototype.fetchMore = function (event) {
+$.InfiniteTweets.prototype.fetchTweets = function (event) {
   event.preventDefault();
 
   var infiniteTweets = this;
