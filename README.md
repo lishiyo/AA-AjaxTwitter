@@ -318,6 +318,10 @@ VS.
 <% }); %>
 ```
 
+But don't forget to use double-percents (`%%`) so ERB doesn't try
+to interpret your Underscore template code as Ruby. See
+[this example][underscore_erb] for a refresher on how this works.
+
 As you did for `TweetCompose`, have your `InfiniteTweets` find the
 template and extract it. Modify the `#insertTweets` method. Take the
 template code and pass it to the `_.template` method, which will build
@@ -352,3 +356,4 @@ not set `lastCreatedAt`, you'll fetch the same tweet again when you
 make an AJAX call to `/feed`.
 
 [underscore_rails]: https://github.com/rweng/underscore-rails
+[underscore_erb]: https://github.com/appacademy/js-curriculum/blob/master/w6d5/underscore-templates.md#erb--underscore
