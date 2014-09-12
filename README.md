@@ -81,7 +81,7 @@ Lastly, let's freeze-out the button so that people can't click it
 while the AJAX request is pending. To do this, in `handleClick`, I
 would set `followState` to `following` or `unfollowing` and call
 `#render`. My `#render` method would set the `disabled` property
-(using `$.fn.property`) if `following`/`unfollowing`. I set the
+(using `$.fn.prop`) if `following`/`unfollowing`. I set the
 disabled property to false if `followState` is
 `followed`/`unfollowed`.
 
