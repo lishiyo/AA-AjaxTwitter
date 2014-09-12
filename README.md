@@ -298,7 +298,8 @@ page.
 In theory, we could build HTML in JavaScript. This would be tortuous
 as the HTML got more sophisticated. Just like we use ERB in Ruby,
 we'll use another templating language called Underscore templates in
-JavaScript. Download the underscore.js library.
+JavaScript. Download the underscore.js library. One option for doing so
+is the [underscore-rails gem][underscore_rails].
 
 In your `div.infinite-tweets`, make a `<script type="text/template">`
 as before. Inside here, write an Underscore template that iterates
@@ -349,3 +350,5 @@ created tweet's data along as well.
 `lastCreatedAt` instance variable. If you were to compose a tweet and
 not set `lastCreatedAt`, you'll fetch the same tweet again when you
 make an AJAX call to `/feed`.
+
+[underscore_rails]: https://github.com/rweng/underscore-rails
