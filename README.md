@@ -126,6 +126,9 @@ Last, we want to add follow toggle buttons for each of these results.
 When building the `li` tags for each user, build a `button`, too. You
 can call `#followToggle` on the button to setup the follow toggle.
 
+NB: Inspect the JSON objects that you are getting from the server
+to see whether or not they are currently being followed.
+
 You could make this work by setting data attributes on the button for
 `user-id` and `initial-follow-state`. In this context, that's kind of
 annoying. Instead, it is common to allow jQuery plugins to take
