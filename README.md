@@ -1,4 +1,4 @@
-# AJAX Twitter
+# w6d5: AJAX Twitter
 
 First, run `rake db:create db:migrate db:seed` for the initial
 database setup.
