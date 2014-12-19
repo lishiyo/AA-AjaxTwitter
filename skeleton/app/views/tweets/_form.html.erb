@@ -33,23 +33,6 @@
 
 </script>
 
-<!-- <script type="text/template" id="tweet-partial">
-
-  <%#= tweet.content %>
-    -- <%#= link_to tweet.user.username, user_url(tweet.user.id) %>
-    -- <%#= tweet.created_at %>
-
-  <%# if tweet.mentions.length > 0 %>
-    <ul>
-      <%# tweet.mentions.each do |mentioned_user| %>
-        <li><%#= link_to mentioned_user.username, user_url(mentioned_user) %></li>
-      <%# end %>
-    </ul>
-  <%# end %>
-
-</script> -->
-
-
 <script>
 
 $.TweetCompose = function(el) {
@@ -81,16 +64,18 @@ $.TweetCompose.prototype.submit = function(event) {
   });
 };
 
-$.TweetCompose.prototype.handleSuccess = function(resp){
+$.TweetCompose.prototype.handleSuccess = function(resp) {
   this.$allInputs.prop('disabled', false);
   this.$el[0].reset();
   this.$el.find("div.mentioned-users").empty();
   this.renderChars();
 
-  var content = JSON.stringify(resp);
-  var $li = $("<li></li>");
-  $li.text(content);
-  $($('form.tweet-compose').data("tweets-ul")).prepend($li);
+  $('ul#feed').trigger("insert-tweet", resp)
+
+  // var content = JSON.stringify(resp);
+  // var $li = $("<li></li>");
+  // $li.text(content);
+  // $($('form.tweet-compose').data("tweets-ul")).prepend($li);
 }
 
 $.TweetCompose.prototype.addMentionedUser = function (event) {

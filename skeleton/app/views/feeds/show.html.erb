@@ -38,6 +38,7 @@
     this.$el = $(el);
     this.maxCreatedAt = null;
     this.$el.find('a.fetch-more').on("click", this.fetchTweets.bind(this))
+    this.$el.find('ul#feed').on("insert-tweet", this.insertTweet.bind(this))
   }
 
   $.InfiniteTweets.prototype.fetchTweets = function (event) {
@@ -65,6 +66,13 @@
     }
   };
 
+  $.InfiniteTweets.prototype.insertTweet = function (event, resp) {
+    var template = $('#underscore-tweet').html();
+    var templateFn = _.template(template);
+    var renderedContent = templateFn({tweets: [resp]});
+    this.$el.find('ul#feed').prepend(renderedContent);
+    this.maxCreatedAt = resp.created_at;
+  };
 
   $.fn.infiniteTweets = function (options) {
     return this.each(function () {
