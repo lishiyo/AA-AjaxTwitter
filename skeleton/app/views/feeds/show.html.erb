@@ -12,6 +12,27 @@
 
 <%= render "tweets/form" %>
 
+<script type="text/template" id="underscore-tweet">
+
+  <%% tweets.forEach(function (tweet) { %>
+    <li>
+    <%%= tweet.content %>
+    -- <a href="<%%= '/users/' + tweet.user.id %>"> <%%= tweet.user.username %> </a>
+    -- <%%= tweet.created_at %>
+
+    <%% if (tweet.mentions.length > 0) { %>
+      <ul>
+        <%% tweet.mentions.forEach(function (mention) { %>
+          <li><a href="<%%= '/users/' + mention.id %>" %>
+            <%%= mention.username %></a></li>
+        <%% }); %>
+      </ul>
+    <%% } %>
+    </li>
+  <%% }); %>
+</script>
+
+
 <script charset="utf-8">
 
   $.InfiniteTweets = function (el) {
@@ -34,9 +55,15 @@
   };
 
   $.InfiniteTweets.prototype.insertTweets = function (data) {
-    var tweets = JSON.stringify(data);
-    var $li = $("<li></li>").text(tweets);
-    this.$el.find('ul#feed').append($li);
+    // var tweets = JSON.stringify(data);
+    console.log(data);
+    var template = $('#underscore-tweet').html();
+
+    var templateFn = _.template(template);
+
+    var renderedContent = templateFn({tweets: data}); // tweets array1
+
+    this.$el.find('ul#feed').append(renderedContent);
     this.maxCreatedAt = $(data).last()[0].created_at;
     if (data.length < 20) {
       this.$el.find('a.fetch-more').remove();
