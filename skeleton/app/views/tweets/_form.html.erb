@@ -71,11 +71,6 @@ $.TweetCompose.prototype.handleSuccess = function(resp) {
   this.renderChars();
 
   $('ul#feed').trigger("insert-tweet", resp)
-
-  // var content = JSON.stringify(resp);
-  // var $li = $("<li></li>");
-  // $li.text(content);
-  // $($('form.tweet-compose').data("tweets-ul")).prepend($li);
 }
 
 $.TweetCompose.prototype.addMentionedUser = function (event) {
