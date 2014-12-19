@@ -1,10 +1,57 @@
 <h1>Welcome <%= current_user.username %>!</h1>
 
 <b>Your Feed!</b>
-<ul>
-  <% @feed_tweets.each do |tweet| %>
-    <li><%= render "tweets/tweet", tweet: tweet %></li>
-  <% end %>
-</ul>
+<div class="infinite-tweets">
+  <a href="javascript:void(0)" class="fetch-more">Fetch More</a>
+  <ul id="feed">
+    <!-- <%# @feed_tweets.each do |tweet| %>
+      <li><%#= render "tweets/tweet", tweet: tweet %></li>
+    <%# end %> -->
+  </ul>
+</div>
 
 <%= render "tweets/form" %>
+
+<script charset="utf-8">
+
+  $.InfiniteTweets = function (el) {
+    this.$el = $(el);
+    this.maxCreatedAt = null;
+    this.$el.find('a.fetch-more').on("click", this.fetchTweets.bind(this))
+  }
+
+  $.InfiniteTweets.prototype.fetchTweets = function (event) {
+    event.preventDefault();
+    var sendData = (this.maxCreatedAt ? { max_created_at: this.maxCreatedAt } : {});
+
+    $.ajax({
+      url: '/feed',
+      type: 'GET',
+      dataType: 'json',
+      data: sendData,
+      success: this.insertTweets.bind(this)
+    });
+  };
+
+  $.InfiniteTweets.prototype.insertTweets = function (data) {
+    var tweets = JSON.stringify(data);
+    var $li = $("<li></li>").text(tweets);
+    this.$el.find('ul#feed').append($li);
+    this.maxCreatedAt = $(data).last()[0].created_at;
+    if (data.length < 20) {
+      this.$el.find('a.fetch-more').remove();
+    }
+  };
+
+
+  $.fn.infiniteTweets = function (options) {
+    return this.each(function () {
+      new $.InfiniteTweets(this, options)
+    }.bind(this));
+  };
+
+  $(function () {
+    $('div.infinite-tweets').infiniteTweets();
+  });
+
+</script>

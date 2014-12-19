@@ -1,6 +1,7 @@
 default: &default
   adapter: postgresql
   host: localhost
+  username: appacademy
   pool: 5
   timeout: 5000
 
