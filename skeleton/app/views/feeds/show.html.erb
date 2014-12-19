@@ -23,8 +23,7 @@
     <%% if (tweet.mentions.length > 0) { %>
       <ul>
         <%% tweet.mentions.forEach(function (mention) { %>
-          <li><a href="<%%= '/users/' + mention.id %>" %>
-            <%%= mention.username %></a></li>
+          <li><a href="<%%= '/users/' + mention.user.id %>" %><%%= mention.user.username %></a></li>
         <%% }); %>
       </ul>
     <%% } %>
@@ -55,13 +54,9 @@
   };
 
   $.InfiniteTweets.prototype.insertTweets = function (data) {
-    // var tweets = JSON.stringify(data);
-    console.log(data);
     var template = $('#underscore-tweet').html();
-
     var templateFn = _.template(template);
-
-    var renderedContent = templateFn({tweets: data}); // tweets array1
+    var renderedContent = templateFn({tweets: data});
 
     this.$el.find('ul#feed').append(renderedContent);
     this.maxCreatedAt = $(data).last()[0].created_at;
